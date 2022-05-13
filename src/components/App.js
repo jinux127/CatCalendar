@@ -2,6 +2,7 @@ import Loading from './Loading.js';
 import { request } from './api.js';
 import Breadcrumb from './Breadcrumb.js';
 import Nodes from './Nodes.js';
+import ImageView from './ImageView.js';
 
 const cache = {};
 
@@ -22,6 +23,7 @@ export default function App($app) {
       isRoot: this.state.isRoot,
       nodes: this.state.nodes,
     });
+    imageView.setState(this.state.selectedFilePath);
   };
 
   const breadcrumb = new Breadcrumb({
@@ -123,9 +125,21 @@ export default function App($app) {
       } catch (error) {}
     },
   });
+
   const loading = new Loading({
     $app,
     initialState: this.state.isLoading,
+  });
+
+  const imageView = new ImageView({
+    $app,
+    initialState: this.state.selectedFilePath,
+    modalClose: () => {
+      this.setState({
+        ...this.state,
+        selectedFilePath: null,
+      });
+    },
   });
 
   const init = async () => {
