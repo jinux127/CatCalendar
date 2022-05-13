@@ -1,0 +1,15 @@
+{
+  "name": "catcalendar",
+  "version": "1.0.0",
+  "description": "컴포넌트JS",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve -l 5000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^13.0.2"
+  }
+}

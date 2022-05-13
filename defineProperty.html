@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul>
+      <h1>Object.defineProperty(object, prop, descriptor)</h1>
+      <li>object 속성을 정의할 객체</li>
+      <li>prop 새로 정의하거나 수정하려는 속성의 이름 또는 Symbol</li>
+      <li>descriptor 새로 정의하거나 수정하려는 속성을 기술하는 객체</li>
+    </ul>
+    이렇게 Object.defineProperty(object, prop, descriptor) 는 객체에 어떤 변화가 생기거나 객체를 참조할 경우 우리가 원하는 행위를 중간에 집어넣을 수도
+    있다.
+  </body>
+  <script>
+    // let a = 10;
+    // const state = {};
+    // Object.defineProperty(state, 'a', {
+    //   get() {
+    //     console.log(`현재 a의 값은 ${a} 입니다.`);
+    //     return a;
+    //   },
+    //   set(value) {
+    //     a = value;
+    //     console.log(`변경된 a의 값은 ${a} 입니다.`);
+    //   },
+    // });
+
+    // console.log(`state.a = ${state.a}`);
+    // state.a = 100;
+
+    let currentObserver = null;
+
+    const state = {
+      a: 10,
+      b: 20,
+    };
+
+    const stateKeys = Object.keys(state);
+
+    for (const key of stateKeys) {
+      let _value = state[key];
+      const observers = new Set();
+      Object.defineProperty(state, key, {
+        get() {
+          if (currentObserver) observers.add(currentObserver);
+          return _value;
+        },
+        set(value) {
+          _value = value;
+          observers.forEach((observer) => observer());
+        },
+      });
+    }
+
+    const 덧셈_계산기 = () => {
+      currentObserver = 덧셈_계산기;
+      console.log(`a + b = ${state.a + state.b}`);
+    };
+
+    const 뺄셈_계산기 = () => {
+      currentObserver = 뺄셈_계산기;
+      console.log(`a - b = ${state.a - state.b}`);
+    };
+
+    덧셈_계산기();
+
+    뺄셈_계산기();
+    state.a = 100;
+    state.b = 200;
+  </script>
+</html>
